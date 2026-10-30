@@ -31,40 +31,34 @@ exec {
 // rasterized from seconds-clock-icon.svg in this module directory.
 
 // Update these three to make new version
-def VERSIONCODE = 9
-def VERSIONNAME = "2.5"
-def CHANGESTRING = "Make the app icon show its build time and date"
+def VERSIONCODE = 10
+def VERSIONNAME = "2.6"
 
-def CHANGELOGS = "fastlane/metadata/android/en-US/changeLogs/"
-def CHANGEFILE = CHANGELOGS + VERSIONCODE + ".txt"
-exec {
-    commandLine "echo", "${CHANGESTRING.toString()}"
-    standardOutput = new FileOutputStream(rootProject.file(CHANGEFILE))
+def keystorePropertiesFile = rootProject.file("local/keystore.properties")
+if (!keystorePropertiesFile.exists()) {
+    keystorePropertiesFile = rootProject.file("../Keys/keystore.properties")
 }
-exec {
-    commandLine "git", "add", "../" + "${CHANGEFILE.toString()}"
-}
-exec {
-    commandLine "sed", "-i", "/This is version/cThis is version " + VERSIONNAME + ".", "../README.md"
-}
-
-def keystorePropertiesFile = rootProject.file("../Keys/keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def hasReleaseSigningKey = keystorePropertiesFile.isFile()
+if (hasReleaseSigningKey) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
     compileSdkVersion 28
 
     signingConfigs {
-        config {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+        if (hasReleaseSigningKey) {
+            config {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
         }
     }
     defaultConfig {
-        applicationId "uk.co.yahoo.p1rpp.secondsclock"
+        applicationId "com.marvin1099.secondsclock"
         versionCode VERSIONCODE
         versionName VERSIONNAME
         minSdk 26
@@ -75,8 +69,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
-            signingConfig signingConfigs.config
-            delete("build/intermediates/incremental/mergeReleaseResources/merger.xml")
+            if (hasReleaseSigningKey) {
+                signingConfig signingConfigs.config
+            }
             resValue("string", 'build_time', "${(new Date()).toString()}")
             resValue("string", 'build_git1', "${gitdata1.toString()}")
             resValue("string", 'build_git2', "${gitdata2.toString()}")
@@ -84,8 +79,6 @@ android {
                     "${" on branch " + gitdata3.toString()}")
         }
         debug {
-            signingConfig signingConfigs.config
-            delete("build/intermediates/incremental/mergeDebugResources/merger.xml")
             resValue("string", 'build_time', "${(new Date()).toString()}")
             resValue("string", 'build_git1', "${gitdata1.toString()}")
             resValue("string", 'build_git2', "${gitdata2.toString()}")

@@ -1,0 +1,3 @@
+Add multiline date-style widget formats with a tap-to-insert guide.
+Add an optional next-alarm section and improve widget refresh behavior.
+Replace the build-generated icon with a static text-first clock icon.

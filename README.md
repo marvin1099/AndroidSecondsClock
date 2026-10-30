@@ -3,7 +3,7 @@ SecondsClock
 
 This app provides a seconds clock for Android.
 
-This is version 2.5.
+This is version 2.6.
 
 It can be used to create home screen widgets and as a full screen night clock.
 
@@ -172,14 +172,13 @@ One file (Slider.java) is licensed under the Apache license 2.0 because it is de
 # Building
 Android now requires all applications to be signed. If you build your own version,
 you need to sign it - I'm not giving you my signing key.
-`build.gradle` expects to find a `keystore.properties` file in the
-subdirectory `keys` of the parent directory of the project's top level directory
-(the one you cloned into). If you keep yours somewhere else, edit `build.gradle`.
+For a signed release build, put a `keystore.properties` file and your keystore in
+the ignored `local/` directory. Release signing is optional for debug builds.
 The `keystore.properties` file should look something like this:-
 
 `keyAlias=`<i>your user name</i><br>
 `keyPassword=`<i>paasword for your key</i><br>
-`storeFile=`<i>full pathname of key file</i><br>
+`storeFile=`<i>path to key file, relative to the SecondsClock module</i><br>
 `storePassword=`<i>password for your keystore (may be different)</i>
 
 You should also be aware that if you debug your own version with Androis Studio, it will sign it with a
