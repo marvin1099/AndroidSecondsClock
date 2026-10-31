@@ -1,0 +1,3 @@
+Keep the automatic checkbox layouts and add optional advanced formatting.
+Add synced and orientation-specific widget and full-screen format profiles.
+Show Android's next alarm-clock alarm from any app in checkbox mode and custom formats.

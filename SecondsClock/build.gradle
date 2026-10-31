@@ -31,8 +31,8 @@ exec {
 // rasterized from seconds-clock-icon.svg in this module directory.
 
 // Update these three to make new version
-def VERSIONCODE = 10
-def VERSIONNAME = "2.6"
+def VERSIONCODE = 11
+def VERSIONNAME = "2.7"
 
 def keystorePropertiesFile = rootProject.file("local/keystore.properties")
 if (!keystorePropertiesFile.exists()) {
